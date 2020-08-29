@@ -45,6 +45,7 @@ class EPD:
 
     # Hardware reset
     def reset(self):
+        logging.debug("Resetting")
         epdconfig.digital_write(self.reset_pin, 1)
         epdconfig.delay_ms(200) 
         epdconfig.digital_write(self.reset_pin, 0)
@@ -53,12 +54,14 @@ class EPD:
         epdconfig.delay_ms(200)   
 
     def send_command(self, command):
+        logging.debug("Send Command")
         epdconfig.digital_write(self.dc_pin, 0)
         epdconfig.digital_write(self.cs_pin, 0)
         epdconfig.spi_writebyte([command])
         epdconfig.digital_write(self.cs_pin, 1)
 
     def send_data(self, data):
+        logging.debug("Send Data")
         epdconfig.digital_write(self.dc_pin, 1)
         epdconfig.digital_write(self.cs_pin, 0)
         epdconfig.spi_writebyte([data])
@@ -71,9 +74,9 @@ class EPD:
         logging.debug("e-Paper busy release")
             
     def init(self):
+        logging.debug("Init")
         if (epdconfig.module_init() != 0):
             return -1
-            
         self.reset()
 
         self.send_command(0x06) # BOOSTER_SOFT_START
